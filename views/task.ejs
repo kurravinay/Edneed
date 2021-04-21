@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+<title>edneed App</title>
+<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Baloo+Bhai|Candal|Chewy&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+</head>
+<body>
+<div class="edneed-container">
+<h2>Task</h2>
+<div class="edneed">
+<form action="/" method="POST" class="edneed-header">
+<input type="text" name="content">
+<button type="submit"><span class="fas fa-plus"></span></button>
+</form>
+<ul class="edneed-list">
+<% Tasks.forEach(details => { %>
+<li class="edneed-list-item">
+<div class="edneed-list-item-name"><img width="20" height="20" src=<%= details.cicon %>><%= details.content %></div>
+<a href="/add/<%= details._id %>" class="edit">
+  <span class="fas fa-plus"></span>
+  </a>
+<a href="/edit/<%= details._id %>" class="edit">
+<span class="fas fa-edit"></span>
+</a>
+<a href="/remove/<%= details._id %>" class="remove">
+<span class="fas fa-times"></span>
+</a>
+</li>
+<% }) %>
+</ul>
+</div>
+</div>
+</body>
