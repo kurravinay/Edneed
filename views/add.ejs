@@ -29,6 +29,9 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
 <% } else { %>
 <li class="edneed-list-item">
 <div class="edneed-list-item-name"><%= details.content %></div>
+<a href="/add/<%= details._id %>" class="edit">
+  <span class="fas fa-plus"></span>
+  </a>
 <a href="/edit/<%= details._id %>" class="edit"> <span class="fas fa-edit"></span>
 </a>
 <a href="/remove/<%= details._id %>" class="remove"> <span class="fas fa-times"></span>

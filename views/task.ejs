@@ -14,10 +14,11 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
 <input type="text" name="content">
 <button type="submit"><span class="fas fa-plus"></span></button>
 </form>
-<ul class="edneed-list">
+<ul>
 <% Tasks.forEach(details => { %>
+
 <li class="edneed-list-item">
-<div class="edneed-list-item-name"><img width="20" height="20" src=<%= details.cicon %>><%= details.content %></div>
+<div class="edneed-list-item-name"><img width="20" height="20" src=<%= '/uploads/'+ details.cicon %>><%= details.content %></div>
 <a href="/add/<%= details._id %>" class="edit">
   <span class="fas fa-plus"></span>
   </a>
@@ -28,7 +29,13 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
 <span class="fas fa-times"></span>
 </a>
 </li>
-<% }) %>
+<%
+if (details.chaild_count >0){
+  %>
+</ul>
+<ul>
+  <%
+}}) %>
 </ul>
 </div>
 </div>
