@@ -11,6 +11,10 @@ type: String
 parent:{
   type: Schema.Types.ObjectId,
 },
+chaild_count:{
+  type:Number,
+  default:0
+},
 weight:{
   type:Number,
   default:100
