@@ -8,13 +8,13 @@ const mongoose = require("mongoose"); // Extension to perform oprations on Mongo
 
 app.use(express.static('files'))
 const Task = require("./models/Task");
-const upload = multer({dest:  '/uploads/'});
+const upload = multer({dest:  '/public/uploads/'});
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 const helpers = require('./models/helpers');
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null,'/public/uploads/');
+        cb(null,'./public/uploads/');
     },
 
     // By default, multer removes file extensions so let's add them back
@@ -34,11 +34,10 @@ app.set("view engine", "ejs");
 
 // Default route
 app.get('/',(req, res) => {
-
  Task.find({}, (err, parent) =>
  {
- //console.log(parent);
-res.render("task.ejs", { Tasks: parent });
+dats= doprocess(parent);
+res.render("task.ejs", { Tasks: dats });
 });
 });
 
@@ -74,8 +73,6 @@ let upload = multer({ storage: storage, fileFilter: helpers.imageFilter }).singl
       }
 
       // Display uploaded image for user validation
-      //res.send({req.file.path});
-     console.log(req.file)
      Task.findByIdAndUpdate(id, { content: req.body.content ,cicon:req.file.filename}, err => {
      if (err) return res.send(500, err);
      res.redirect("/");
@@ -99,23 +96,25 @@ content: req.body.content,
 parent:req.body.parent,
 weight:req.body.weight*10
 });
-console.log("hrh");
 toTask.save();
+const id = req.params.id;
+Task.findByIdAndUpdate(id, {$inc:{chaild_count:1}}, err => {
+if (err) return res.send(500, err);
+});
+
 res.redirect("/");
 });
 
+// get the list
 
 app.get("/", (req, res) => {
-Task.find({}, (err, tasks) => {
+Task.find({"parent":null}, (err, tasks) => {
+  console.log(tasks);
 res.render("list.ejs", { Tasks: tasks });
 });
 });
 
 app.post('/',async (req, res) => {
-//quwery=Task.find({"parent":null}).sort([['weight', -1]]).limit(1).select('weight');
-//quwery.toArray()[0]["weight"];
-//console.log(quwery.toArray()[0]["weight"]);
-
 const toTask = new Task({
 content: req.body.content,
 });
@@ -137,5 +136,28 @@ if (err) return res.send(500, err);
 res.redirect("/");
 });
 });
+
+// logic to group the notation
+function doprocess(parent){
+var  dataset_parent=[];
+parent.forEach(function(element) {
+if(element.parent == undefined){
+dataset_parent.push(element);
+chek= String(element._id);
+parent.forEach(function(sublevel){
+if(chek == sublevel.parent){
+dataset_parent.push(sublevel);
+if(sublevel.chaild_count > 0){
+parent.forEach(function(subsublevel){
+check1= String(sublevel._id);
+if( check1 == subsublevel.parent){
+dataset_parent.push(subsublevel);
+parent.forEach(function(subsubsublevel){
+check2= String(subsublevel._id);
+if( check2 == subsubsublevel.parent){
+dataset_parent.push(subsubsublevel);
+}});  }  });  }  }  });  }  });
+return dataset_parent;
+}
 
 app.listen(3000, () => console.log("Server Up and running"));
